@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -70,6 +71,45 @@ namespace ConsoleApp23
             // json и xml сохраняют только публичные данные объектов
             // binaryformatter сохраняет и приватные данные
             // сериализации подвержены только поля (свойства)
+            jsonSerializer =
+                new DataContractJsonSerializer(typeof(Animal));
+
+            Animal animal = new Animal {
+              Age = 15
+            };
+            animal.SetWeight();
+
+            /*using (var fs = File.Create("bob.bin"))
+            {
+                jsonSerializer.WriteObject(fs, animal);
+            }
+
+            using (var fs = File.Open("bob.bin", FileMode.Open))
+            {
+                Animal animal1 = (Animal)jsonSerializer.ReadObject(fs);
+            }*/
+            JsonSerializerSettings serializerSettings = new JsonSerializerSettings();
+            serializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            string stringBob = JsonConvert.SerializeObject(animal, serializerSettings);
+            
+            Console.WriteLine(stringBob);
+            // BinaryFormatter и DataContractJsonSerializer
+            // требуют атрибут [Serializable] для класса
+            // BinaryFormatter, DataContractJsonSerializer сохраняет приватные поля (проверено)
+            // XmlSerializer требует от класса модификатор public
+        }
+    }
+
+    class Animal
+    {
+        public string Name;
+        public int Age { get; set; }
+
+        private double Weight;
+
+        public void SetWeight()
+        {
+            Weight = 2.0;
         }
     }
 }
