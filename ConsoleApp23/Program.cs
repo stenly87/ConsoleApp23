@@ -70,6 +70,7 @@ namespace ConsoleApp23
 
             // json и xml сохраняют только публичные данные объектов
             // binaryformatter сохраняет и приватные данные
+            // приватные поля сохраняются при наличии [Serializable]
             // сериализации подвержены только поля (свойства)
             jsonSerializer =
                 new DataContractJsonSerializer(typeof(Animal));
@@ -94,8 +95,7 @@ namespace ConsoleApp23
             
             Console.WriteLine(stringBob);
             // BinaryFormatter и DataContractJsonSerializer
-            // требуют атрибут [Serializable] для класса
-            // BinaryFormatter, DataContractJsonSerializer сохраняет приватные поля (проверено)
+            // могут требовать атрибут [Serializable] для класса
             // XmlSerializer требует от класса модификатор public
         }
     }
